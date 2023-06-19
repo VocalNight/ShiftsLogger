@@ -2,10 +2,15 @@
 using RestSharp;
 using ShiftLoggerConsole;
 using ShiftLoggerConsole.Models;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 var jsonClient = new RestClient("https://localhost:7221/api/");
 var request = new RestRequest("ShiftItems");
 var response = jsonClient.ExecuteAsync(request);
+HttpClient _client = new HttpClient();
+
 
 List<ShiftModel> shiftsList;
 
@@ -24,33 +29,45 @@ if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
 
 }
 
-Console.WriteLine("Welcome to the Shift Logger");
-Console.WriteLine("Select an option with the numpad");
-Console.WriteLine(@"
+viewMenu();
+
+async void viewMenu()
+{
+    while (true)
+    {
+
+        Console.WriteLine("Welcome to the Shift Logger");
+        Console.WriteLine("Select an option with the numpad");
+        Console.WriteLine(@"
 1 - Add new shift
 2 - Show shifts
 3 - Delete shifts
 4 - Exit");
 
-ConsoleKey choice = Console.ReadKey().Key;
+        ConsoleKey choice = Console.ReadKey().Key;
 
-switch (choice)
-{
-    case ConsoleKey.NumPad1:
-        AddShift();
-        break;
+        switch (choice)
+        {
+            case ConsoleKey.NumPad1:
+                await AddShift();
+                break;
 
-    case ConsoleKey.NumPad2:
-        break;
+            case ConsoleKey.NumPad2:
+                break;
 
-    case ConsoleKey.NumPad3:
-        break;
+            case ConsoleKey.NumPad3:
+                break;
 
-    case ConsoleKey.NumPad4:
-        break;
+            case ConsoleKey.NumPad4:
+                break;
+        }
+    }
+
 }
 
-void AddShift()
+
+
+async Task AddShift()
 {
     Console.WriteLine("Insert start date (dd-mm-yyyy)");
     string startDate = Console.ReadLine();
@@ -61,7 +78,7 @@ void AddShift()
     DateTime startingTimeDate = DateTime.ParseExact($"{startDate} {startTime}", "dd-MM-yyyy HH:mm",
                                        System.Globalization.CultureInfo.InvariantCulture);
 
-    
+
 
     Console.WriteLine("Insert end date (dd-mm-yyyy");
     string endDate = Console.ReadLine();
@@ -72,6 +89,36 @@ void AddShift()
     DateTime endingTimeDate = DateTime.ParseExact($"{endDate} {endTime}", "dd-MM-yyyy HH:mm",
                                        System.Globalization.CultureInfo.InvariantCulture);
 
-    Console.WriteLine(startingTimeDate);
-    Console.WriteLine(endingTimeDate);
+    TimeSpan duration = endingTimeDate - startingTimeDate;
+
+    ShiftModelDto shift = new()
+    {
+        day = startingTimeDate.Day,
+        startTime = startingTimeDate,
+        endTime = endingTimeDate,
+        duration = duration.ToString()
+    };
+
+    CreateNewUser(shift);
+
+    Console.ReadLine();
 }
+
+async void CreateNewUser( ShiftModelDto model )
+{
+
+    var json = JsonConvert.SerializeObject(model);
+
+    var jsonClient = new RestClient("https://localhost:7221/api/");
+    var request = new RestRequest("ShiftItems", Method.Post).AddJsonBody(json);
+    var response = await jsonClient.PostAsync(request);
+
+    if (response.IsSuccessStatusCode)
+    {
+        await Console.Out.WriteLineAsync("Sucess!");
+    } else
+    {
+        await Console.Out.WriteLineAsync(response.ErrorException.ToString());
+    }
+
+    }

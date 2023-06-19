@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShiftLoggerConsole.Models
 {
-    public class ShiftModel
+    public class ShiftModelDto
     {
-        public long Id { get; set; }
         public int day { get; set; }
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
