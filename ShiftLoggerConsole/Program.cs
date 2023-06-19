@@ -1,2 +1,77 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Newtonsoft.Json;
+using RestSharp;
+using ShiftLoggerConsole;
+using ShiftLoggerConsole.Models;
+
+var jsonClient = new RestClient("https://localhost:7221/api/");
+var request = new RestRequest("ShiftItems");
+var response = jsonClient.ExecuteAsync(request);
+
+List<ShiftModel> shiftsList;
+
+if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
+{
+
+    string rawResponse = response.Result.Content;
+    List<ShiftModel> shifts = JsonConvert.DeserializeObject<List<ShiftModel>>(rawResponse);
+
+    foreach (ShiftModel a in shifts)
+    {
+        Console.WriteLine(a.Id);
+    }
+    CreateTableEngine.ShowTable(shifts, "Categories");
+    shiftsList = shifts.ToList();
+
+}
+
+Console.WriteLine("Welcome to the Shift Logger");
+Console.WriteLine("Select an option with the numpad");
+Console.WriteLine(@"
+1 - Add new shift
+2 - Show shifts
+3 - Delete shifts
+4 - Exit");
+
+ConsoleKey choice = Console.ReadKey().Key;
+
+switch (choice)
+{
+    case ConsoleKey.NumPad1:
+        AddShift();
+        break;
+
+    case ConsoleKey.NumPad2:
+        break;
+
+    case ConsoleKey.NumPad3:
+        break;
+
+    case ConsoleKey.NumPad4:
+        break;
+}
+
+void AddShift()
+{
+    Console.WriteLine("Insert start date (dd-mm-yyyy)");
+    string startDate = Console.ReadLine();
+
+    Console.WriteLine("Insert start time (hh:mm)");
+    string startTime = Console.ReadLine();
+
+    DateTime startingTimeDate = DateTime.ParseExact($"{startDate} {startTime}", "dd-MM-yyyy HH:mm",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+    
+
+    Console.WriteLine("Insert end date (dd-mm-yyyy");
+    string endDate = Console.ReadLine();
+
+    Console.WriteLine("Insert end time (hh:mm");
+    string endTime = Console.ReadLine();
+
+    DateTime endingTimeDate = DateTime.ParseExact($"{endDate} {endTime}", "dd-MM-yyyy HH:mm",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+    Console.WriteLine(startingTimeDate);
+    Console.WriteLine(endingTimeDate);
+}
