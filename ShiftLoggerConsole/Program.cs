@@ -2,32 +2,8 @@
 using RestSharp;
 using ShiftLoggerConsole;
 using ShiftLoggerConsole.Models;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-
-var jsonClient = new RestClient("https://localhost:7221/api/");
-var request = new RestRequest("ShiftItems");
-var response = jsonClient.ExecuteAsync(request);
-HttpClient _client = new HttpClient();
 
 
-List<ShiftModel> shiftsList;
-
-if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
-{
-
-    string rawResponse = response.Result.Content;
-    List<ShiftModel> shifts = JsonConvert.DeserializeObject<List<ShiftModel>>(rawResponse);
-
-    foreach (ShiftModel a in shifts)
-    {
-        Console.WriteLine(a.Id);
-    }
-    CreateTableEngine.ShowTable(shifts, "Categories");
-    shiftsList = shifts.ToList();
-
-}
 
 viewMenu();
 
@@ -53,9 +29,11 @@ async void viewMenu()
                 break;
 
             case ConsoleKey.NumPad2:
+                await ShowShifts();
                 break;
 
             case ConsoleKey.NumPad3:
+                await DeleteShift();
                 break;
 
             case ConsoleKey.NumPad4:
@@ -65,7 +43,34 @@ async void viewMenu()
 
 }
 
+async Task DeleteShift()
+{
 
+}
+
+async Task ShowShifts()
+{
+    var jsonClient = new RestClient("https://localhost:7221/api/");
+    var request = new RestRequest("ShiftItems");
+    var response = jsonClient.ExecuteAsync(request);
+    HttpClient _client = new HttpClient();
+
+
+    List<ShiftModel> shiftsList;
+
+    if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
+    {
+        string rawResponse = response.Result.Content;
+        List<ShiftModel> shifts = JsonConvert.DeserializeObject<List<ShiftModel>>(rawResponse);
+
+        foreach (ShiftModel a in shifts)
+        {
+            Console.WriteLine(a.Id);
+        }
+        CreateTableEngine.ShowTable(shifts, "Categories");
+        shiftsList = shifts.ToList();
+    }
+}
 
 async Task AddShift()
 {
@@ -116,9 +121,10 @@ async void CreateNewUser( ShiftModelDto model )
     if (response.IsSuccessStatusCode)
     {
         await Console.Out.WriteLineAsync("Sucess!");
-    } else
+    }
+    else
     {
         await Console.Out.WriteLineAsync(response.ErrorException.ToString());
     }
 
-    }
+}
