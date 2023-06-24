@@ -2,9 +2,6 @@
 using RestSharp;
 using ShiftLoggerConsole;
 using ShiftLoggerConsole.Models;
-
-
-
 viewMenu();
 
 async void viewMenu()
@@ -45,7 +42,25 @@ async void viewMenu()
 
 async Task DeleteShift()
 {
+    Console.WriteLine("Inform a id to delete");
+    string id = Console.ReadLine();
 
+
+    var jsonClient = new RestClient("https://localhost:7221/api/");
+
+    var request = new RestRequest($"ShiftItems/{id}", Method.Delete);
+    request.AddHeader("Content-Type", "application/json");
+
+    var response = jsonClient.Execute(request);
+
+    if (response.IsSuccessStatusCode)
+    {
+        await Console.Out.WriteLineAsync("Sucess!");
+    }
+    else
+    {
+        await Console.Out.WriteLineAsync(response.ErrorException.ToString());
+    }
 }
 
 async Task ShowShifts()
