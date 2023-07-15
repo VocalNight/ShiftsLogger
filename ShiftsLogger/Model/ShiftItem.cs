@@ -1,4 +1,6 @@
-﻿namespace ShiftsLogger.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShiftsLogger.Model
 {
     public class ShiftItem
     {
@@ -8,8 +10,7 @@
         public DateTime EndTime { get; set; }
         public string Duration { get; set; }
 
+        [Required]
         public int EmployeeId { get; set; }
-
-        public virtual Employee Employee { get; set; } = null!;
     }
 }

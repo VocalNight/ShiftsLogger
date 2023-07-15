@@ -9,7 +9,7 @@ public class ShiftLoggerContext : DbContext
     public DbSet<ShiftItem> ShiftItems { get; set; }
     public DbSet<Employee> Employees { get; set; }
 
-    public ShiftLoggerContext( DbContextOptions options ) : base(options) { }
+    public ShiftLoggerContext( DbContextOptions<ShiftLoggerContext> options ) : base(options) { }
 
     protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder )
     {

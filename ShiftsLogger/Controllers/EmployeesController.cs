@@ -11,55 +11,55 @@ namespace ShiftsLogger.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShiftItemsController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
         private readonly ShiftLoggerContext _context;
 
-        public ShiftItemsController(ShiftLoggerContext context)
+        public EmployeesController(ShiftLoggerContext context)
         {
             _context = context;
         }
 
-        // GET: api/ShiftItems
+        // GET: api/Employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShiftItem>>> GetShiftItems()
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
         {
-          if (_context.ShiftItems == null)
+          if (_context.Employees == null)
           {
               return NotFound();
           }
-            return await _context.ShiftItems.ToListAsync();
+            return await _context.Employees.ToListAsync();
         }
 
-        // GET: api/ShiftItems/5
+        // GET: api/Employees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ShiftItem>> GetShiftItem(long id)
+        public async Task<ActionResult<Employee>> GetEmployee(int id)
         {
-          if (_context.ShiftItems == null)
+          if (_context.Employees == null)
           {
               return NotFound();
           }
-            var shiftItem = await _context.ShiftItems.FindAsync(id);
+            var employee = await _context.Employees.FindAsync(id);
 
-            if (shiftItem == null)
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return shiftItem;
+            return employee;
         }
 
-        // PUT: api/ShiftItems/5
+        // PUT: api/Employees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutShiftItem(long id, ShiftItem shiftItem)
+        public async Task<IActionResult> PutEmployee(int id, Employee employee)
         {
-            if (id != shiftItem.Id)
+            if (id != employee.EmployeeId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(shiftItem).State = EntityState.Modified;
+            _context.Entry(employee).State = EntityState.Modified;
 
             try
             {
@@ -67,7 +67,7 @@ namespace ShiftsLogger.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ShiftItemExists(id))
+                if (!EmployeeExists(id))
                 {
                     return NotFound();
                 }
@@ -80,44 +80,44 @@ namespace ShiftsLogger.Controllers
             return NoContent();
         }
 
-        // POST: api/ShiftItems
+        // POST: api/Employees
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ShiftItem>> PostShiftItem(ShiftItem shiftItem)
+        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
         {
-          if (_context.ShiftItems == null)
+          if (_context.Employees == null)
           {
-              return Problem("Entity set 'ShiftLoggerContext.ShiftItems'  is null.");
+              return Problem("Entity set 'ShiftLoggerContext.Employees'  is null.");
           }
-            _context.ShiftItems.Add(shiftItem);
+            _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetShiftItem", new { id = shiftItem.Id }, shiftItem);
+            return CreatedAtAction(nameof(GetEmployee), new { id = employee.EmployeeId }, employee);
         }
 
-        // DELETE: api/ShiftItems/5
+        // DELETE: api/Employees/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShiftItem(long id)
+        public async Task<IActionResult> DeleteEmployee(int id)
         {
-            if (_context.ShiftItems == null)
+            if (_context.Employees == null)
             {
                 return NotFound();
             }
-            var shiftItem = await _context.ShiftItems.FindAsync(id);
-            if (shiftItem == null)
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            _context.ShiftItems.Remove(shiftItem);
+            _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ShiftItemExists(long id)
+        private bool EmployeeExists(int id)
         {
-            return (_context.ShiftItems?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Employees?.Any(e => e.EmployeeId == id)).GetValueOrDefault();
         }
     }
 }
