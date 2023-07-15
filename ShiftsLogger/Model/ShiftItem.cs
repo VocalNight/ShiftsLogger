@@ -7,5 +7,9 @@
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string Duration { get; set; }
+
+        public int EmployeeId { get; set; }
+
+        public virtual Employee Employee { get; set; } = null!;
     }
 }

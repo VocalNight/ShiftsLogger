@@ -1,19 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
-namespace ShiftsLogger.Model
+namespace ShiftsLogger.Model;
+
+public class ShiftLoggerContext : DbContext
 {
-    public class ShiftLoggerContext : DbContext
+
+    public DbSet<ShiftItem> ShiftItems { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+
+    public ShiftLoggerContext( DbContextOptions options ) : base(options) { }
+
+    protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder )
     {
-        public ShiftLoggerContext(DbContextOptions<ShiftLoggerContext> options) : base(options)
-        {
+        SqlConnectionStringBuilder builder = new();
 
-        }
+        builder.DataSource = "(localdb)\\mssqllocaldb";
+        builder.InitialCatalog = "ShiftControl";
+        builder.IntegratedSecurity = true;
+        builder.TrustServerCertificate = true;
+        builder.MultipleActiveResultSets = true;
+        builder.ConnectTimeout = 3;
 
-        protected override void OnModelCreating( ModelBuilder modelBuilder )
-        {
-            modelBuilder.Entity<ShiftItem>().ToTable("ShiftItem");
-        }
+        string? connection = builder.ConnectionString;
+    }
 
-        public DbSet<ShiftItem> ShiftItems { get; set; }
+    protected override void OnModelCreating( ModelBuilder modelBuilder )
+    {
+        modelBuilder.Entity<ShiftItem>().ToTable("ShiftItem");
     }
 }

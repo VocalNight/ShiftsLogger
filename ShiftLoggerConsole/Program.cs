@@ -51,7 +51,7 @@ async Task DeleteShift()
     var request = new RestRequest($"ShiftItems/{id}", Method.Delete);
     request.AddHeader("Content-Type", "application/json");
 
-    var response = jsonClient.Execute(request);
+    var response = jsonClient.Delete(request);
 
     if (response.IsSuccessStatusCode)
     {

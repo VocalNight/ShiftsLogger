@@ -31,8 +31,6 @@ using (var db = app.Services.CreateScope())
 {
     var services = db.ServiceProvider;
     var context = services.GetRequiredService<ShiftLoggerContext>();
-    context.Database.EnsureCreated();
-    Console.WriteLine("Database created!");
 }
 
 app.Run();
