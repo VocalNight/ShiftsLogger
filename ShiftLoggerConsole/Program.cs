@@ -17,9 +17,8 @@ async void viewMenu()
 2 - Show shifts
 3 - Delete shifts
 4 - Register an Employee
-5 - Delete an Employee
-6 - Show Employees
-7 - Exit");
+5 - Show Employees
+6 - Exit");
 
         ConsoleKey choice = Console.ReadKey(intercept: true).Key;
 
@@ -38,7 +37,7 @@ async void viewMenu()
                 break;
 
             case ConsoleKey.NumPad4:
-                await ShowEmployees();
+                await CreateEmployee();
                 break;
 
             case ConsoleKey.NumPad5:
@@ -46,10 +45,6 @@ async void viewMenu()
                 break;
 
             case ConsoleKey.NumPad6:
-                await ShowEmployees();
-                break;
-
-            case ConsoleKey.NumPad7:
                 Console.Clear();
                 Console.Write("Bye!");
                 return;
@@ -179,6 +174,24 @@ async Task AddShift()
     Console.Clear();
 }
 
+async Task CreateEmployee()
+{
+    Console.Clear();
+    Console.WriteLine("What's the name of the employee?");
+    string name = Console.ReadLine();
+
+    EmployeeModel model = new()
+    {
+        EmployeeName = name
+    };
+
+    CreateNewEmployee(model);
+
+    Console.WriteLine("Press any button to continue");
+    Console.ReadLine();
+    Console.Clear();
+}
+
 async void CreateNewShift( ShiftModelDto model )
 {
 
@@ -186,6 +199,24 @@ async void CreateNewShift( ShiftModelDto model )
 
     var jsonClient = new RestClient("https://localhost:7221/api/");
     var request = new RestRequest("ShiftItems", Method.Post).AddJsonBody(json);
+    var response = await jsonClient.PostAsync(request);
+
+    if (response.IsSuccessStatusCode)
+    {
+        await Console.Out.WriteLineAsync("Sucess!");
+    }
+    else
+    {
+        await Console.Out.WriteLineAsync(response.ErrorException.ToString());
+    }
+}
+
+async void CreateNewEmployee( EmployeeModel model )
+{
+    var json = JsonConvert.SerializeObject(model);
+
+    var jsonClient = new RestClient("https://localhost:7221/api/");
+    var request = new RestRequest("Employees", Method.Post).AddJsonBody(json);
     var response = await jsonClient.PostAsync(request);
 
     if (response.IsSuccessStatusCode)
