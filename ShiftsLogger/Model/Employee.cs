@@ -10,6 +10,6 @@ namespace ShiftsLogger.Model
 
         [Required]
         [StringLength(50)]
-        public string EmployeeName { get; set; }
+        public string Name { get; set; }
     }
 }

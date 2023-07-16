@@ -16,7 +16,6 @@ namespace ShiftLoggerConsole
 
             ConsoleTableBuilder
                 .From(tableData)
-                .WithColumn("Id", "Day", "Start time", "Finish Time", "Duration")
                 .ExportAndWriteLine();
             Console.WriteLine("\n\n");
         }

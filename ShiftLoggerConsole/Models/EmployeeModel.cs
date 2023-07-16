@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace ShiftLoggerConsole.Models
 {
-    public class ShiftModelDto
+    public class EmployeeModel
     {
-        public int day { get; set; }
-        public DateTime startTime { get; set; }
-        public DateTime endTime { get; set; }
-        public string duration { get; set; }
-
         public int EmployeeId { get; set; }
+
+        public string EmployeeName { get; set; } = String.Empty;
     }
 }
