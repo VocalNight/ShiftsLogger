@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShiftsLogger", "ShiftsLogger\ShiftsLogger.csproj", "{A6A5D20E-9783-4A31-B522-D9341E5D2772}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftLoggerConsole", "ShiftLoggerConsole\ShiftLoggerConsole.csproj", "{591D71A6-942E-4EA9-B6D7-73A6C7171DF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShiftLoggerConsole", "ShiftLoggerConsole\ShiftLoggerConsole.csproj", "{591D71A6-942E-4EA9-B6D7-73A6C7171DF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
