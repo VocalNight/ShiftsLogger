@@ -2,11 +2,13 @@
 using RestSharp;
 using ShiftLoggerConsole;
 using ShiftLoggerConsole.Models;
+using System.Globalization;
 
 partial class Program
 {
    static async Task DeleteShift()
     {
+        ShowShifts(true);
         Console.WriteLine("Inform a id to delete");
         string id = Console.ReadLine();
 
@@ -20,15 +22,21 @@ partial class Program
 
         if (response.IsSuccessStatusCode)
         {
+            Console.Clear();
             await Console.Out.WriteLineAsync("Sucess!");
+            await Console.Out.WriteLineAsync("Press enter to continue");
+            Console.ReadLine();
         }
         else
         {
-            await Console.Out.WriteLineAsync(response.ErrorException.ToString());
+            Console.Clear();
+            await Console.Out.WriteLineAsync("Ops, something went wrong! Try again or contant the programmer");
+            await Console.Out.WriteLineAsync("Press enter to continue!");
+            Console.ReadLine();
         }
     }
 
-    static async Task ShowShifts()
+    static async Task ShowShifts(bool justShow)
     {
         var jsonClient = new RestClient("https://localhost:7221/api/");
         var request = new RestRequest("ShiftItems");
@@ -44,6 +52,13 @@ partial class Program
 
             CreateTableEngine.ShowTable(shifts, "Shifts");
             shiftsList = shifts.ToList();
+        }
+
+        if (!justShow)
+        {
+            Console.WriteLine("Press enter to continue");
+            Console.ReadLine();
+            Console.Clear();
         }
     }
 
@@ -81,8 +96,8 @@ partial class Program
     static async Task AddShift()
     {
         Console.Clear();
-        Console.WriteLine("Insert start date (dd-mm-yyyy)");
-        string startDate = Console.ReadLine();
+        Console.WriteLine("Start date!");
+        string startDate = GetDateInput();
 
         Console.Clear();
         Console.WriteLine("Insert start time (hh:mm)");
@@ -92,8 +107,8 @@ partial class Program
                                            System.Globalization.CultureInfo.InvariantCulture);
 
         Console.Clear();
-        Console.WriteLine("Insert end date (dd-mm-yyyy)");
-        string endDate = Console.ReadLine();
+        Console.WriteLine("End date!");
+        string endDate = GetDateInput();
 
         Console.Clear();
         Console.WriteLine("Insert end time (hh:mm)");
@@ -121,7 +136,6 @@ partial class Program
 
         CreateNewShift(shift);
 
-        Console.WriteLine("Press any button to continue");
         Console.ReadLine();
         Console.Clear();
     }
@@ -139,7 +153,6 @@ partial class Program
 
         CreateNewEmployee(model);
 
-        Console.WriteLine("Press any button to continue");
         Console.ReadLine();
         Console.Clear();
     }
@@ -155,11 +168,16 @@ partial class Program
 
         if (response.IsSuccessStatusCode)
         {
+            Console.Clear();
             await Console.Out.WriteLineAsync("Sucess!");
+            await Console.Out.WriteLineAsync("Press enter to continue");
         }
         else
         {
-            await Console.Out.WriteLineAsync(response.ErrorException.ToString());
+            Console.Clear();
+            await Console.Out.WriteLineAsync("Ops, something went wrong! Try again or contant the programmer");
+            await Console.Out.WriteLineAsync("Press enter to continue!");
+            Console.ReadLine();
         }
     }
 
@@ -174,11 +192,29 @@ partial class Program
         if (response.IsSuccessStatusCode)
         {
             await Console.Out.WriteLineAsync("Sucess!");
+            await Console.Out.WriteLineAsync("Press enter to continue");
         }
         else
         {
-            await Console.Out.WriteLineAsync(response.ErrorException.ToString());
+            Console.Clear();
+            await Console.Out.WriteLineAsync("Ops, something went wrong! Try again or contant the programmer");
+            await Console.Out.WriteLineAsync("Press enter to continue!");
+            Console.ReadLine();
         }
     }
 
+    static string GetDateInput()
+    {
+        Console.WriteLine("\nPlease insert the date in the format dd-mm-yyyy. Make sure the ending date is the same or higher than the starting date!");
+
+        string dateInput = Console.ReadLine();
+
+        while (!DateTime.TryParseExact(dateInput, "dd-MM-yyyy", new CultureInfo("en-US"), DateTimeStyles.None, out _))
+        {
+            Console.WriteLine("\nInvalid date. Try again:\n");
+            dateInput = Console.ReadLine();
+        }
+
+        return dateInput;
+    }
 }

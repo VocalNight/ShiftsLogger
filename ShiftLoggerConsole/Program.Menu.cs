@@ -25,7 +25,7 @@ partial class Program
                     break;
 
                 case ConsoleKey.NumPad2:
-                    await ShowShifts();
+                    await ShowShifts(false);
                     break;
 
                 case ConsoleKey.NumPad3:
