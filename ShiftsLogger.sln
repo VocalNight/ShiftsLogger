@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShiftsLogger", "ShiftsLogge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShiftLoggerConsole", "ShiftLoggerConsole\ShiftLoggerConsole.csproj", "{591D71A6-942E-4EA9-B6D7-73A6C7171DF9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{546C5E64-44E4-4A21-85AA-0F49AB27F991}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.rm = Readme.rm
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
